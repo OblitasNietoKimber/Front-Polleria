@@ -7,6 +7,7 @@ import CategoryIcon from "./CategoryIcon";
 import SiteHeader from "./SiteHeader";
 import ProductDetailModal from "./ProductDetailModal";
 import CartDrawer from "./CartDrawer";
+import DeliveryForm from "./DeliveryForm";
 import { CATEGORIES, DELIVERY_COST, PRODUCTS } from "../data/menu";
 import { money } from "../utils/currency";
 
@@ -371,84 +372,14 @@ export default function LenasYSaboresApp() {
           </div>
 
           {/* STEP 1: DELIVERY */}
-          {checkoutStep === 1 && (
-            <div>
-              <h2 className="font-display" style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: 18 }}>Datos de entrega</h2>
-
-              <div style={{ display: "flex", gap: 10, marginBottom: 22 }}>
-                <button
-                  onClick={() => setDeliveryType("delivery")}
-                  className={`chip ${deliveryType === "delivery" ? "active" : ""}`}
-                  style={{ padding: "12px 18px", fontSize: "0.88rem" }}
-                >
-                  <MapPin size={16} /> Delivery
-                </button>
-                <button
-                  onClick={() => setDeliveryType("pickup")}
-                  className={`chip ${deliveryType === "pickup" ? "active" : ""}`}
-                  style={{ padding: "12px 18px", fontSize: "0.88rem" }}
-                >
-                  <Store size={16} /> Recojo en tienda
-                </button>
-              </div>
-
-              <div style={{ display: "grid", gap: 16 }}>
-                <div>
-                  <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 6 }}>Nombre completo</label>
-                  <input
-                    className={`lys-input ${formErrors.name ? "err" : ""}`}
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="Ej. María Torres"
-                  />
-                  {formErrors.name && <span style={{ color: "#B23A2E", fontSize: "0.75rem" }}>{formErrors.name}</span>}
-                </div>
-
-                {deliveryType === "delivery" && (
-                  <>
-                    <div>
-                      <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 6 }}>Dirección de entrega</label>
-                      <input
-                        className={`lys-input ${formErrors.address ? "err" : ""}`}
-                        value={form.address}
-                        onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        placeholder="Av. Ejemplo 123, distrito"
-                      />
-                      {formErrors.address && <span style={{ color: "#B23A2E", fontSize: "0.75rem" }}>{formErrors.address}</span>}
-                    </div>
-                    <div>
-                      <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 6 }}>Referencia (opcional)</label>
-                      <input
-                        className="lys-input"
-                        value={form.reference}
-                        onChange={(e) => setForm({ ...form, reference: e.target.value })}
-                        placeholder="Ej. frente al parque, edificio azul"
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div>
-                  <label style={{ fontSize: "0.82rem", fontWeight: 600, display: "block", marginBottom: 6 }}>Teléfono de contacto</label>
-                  <input
-                    className={`lys-input ${formErrors.phone ? "err" : ""}`}
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="9XX XXX XXX"
-                  />
-                  {formErrors.phone && <span style={{ color: "#B23A2E", fontSize: "0.75rem" }}>{formErrors.phone}</span>}
-                </div>
-              </div>
-
-              <button
-                className="btn-ember"
-                style={{ marginTop: 26, width: "100%" }}
-                onClick={() => { if (validateDelivery()) setCheckoutStep(2); }}
-              >
-                Continuar al pago
-              </button>
-            </div>
-          )}
+          {checkoutStep === 1 && <DeliveryForm
+            deliveryType={deliveryType}
+            form={form}
+            errors={formErrors}
+            onTypeChange={setDeliveryType}
+            onFormChange={(field, value) => setForm({ ...form, [field]: value })}
+            onContinue={() => { if (validateDelivery()) setCheckoutStep(2); }}
+          />}
 
           {/* STEP 2: PAYMENT */}
           {checkoutStep === 2 && (

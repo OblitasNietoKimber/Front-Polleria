@@ -1,13 +1,26 @@
 import { IconoTarjeta } from "../common/Iconos";
 
-const metodosPago = [
-  { nombre: "Efectivo", porcentaje: "45%", monto: "S/ 12,852.18", color: "var(--ember)" },
-  { nombre: "Tarjeta", porcentaje: "35%", monto: "S/ 9,998.14", color: "var(--char)" },
-  { nombre: "Yape / Plin", porcentaje: "15%", monto: "S/ 4,284.06", color: "var(--rust)" },
-  { nombre: "Otros", porcentaje: "5%", monto: "S/ 1,428.02", color: "var(--gold)" },
-];
+const colores = ["var(--ember)", "var(--char)", "var(--rust)", "var(--gold)"];
+const formatoSoles = new Intl.NumberFormat("es-PE", {
+  style: "currency",
+  currency: "PEN",
+});
 
-export default function VentasMetodoPago() {
+function normalizarMetodos(metodos) {
+  const totalGeneral = metodos.reduce((acc, item) => acc + item.total, 0);
+
+  return metodos.map((item, index) => ({
+    ...item,
+    color: colores[index % colores.length],
+    monto: formatoSoles.format(item.total),
+    porcentaje: totalGeneral ? `${Math.round((item.total / totalGeneral) * 100)}%` : "0%",
+  }));
+}
+
+export default function VentasMetodoPago({ metodos = [] }) {
+  const metodosPago = normalizarMetodos(metodos);
+  const total = metodos.reduce((acc, item) => acc + item.total, 0);
+
   return (
     <section className="ticket-card admin-payment-card">
       <div className="admin-block-title">
@@ -26,12 +39,14 @@ export default function VentasMetodoPago() {
 
           <div className="admin-donut-center">
             <span>Total</span>
-            <strong className="font-mono">S/ 28,560</strong>
+            <strong className="font-mono">{formatoSoles.format(total)}</strong>
           </div>
         </div>
 
         <div className="admin-payment-list">
-          {metodosPago.map((item) => (
+          {metodosPago.length === 0 ? (
+            <p className="admin-empty-text">No hay ventas pagadas registradas.</p>
+          ) : metodosPago.map((item) => (
             <div className="admin-payment-row" key={item.nombre}>
               <div className="admin-payment-left">
                 <span className="admin-color-dot" style={{ backgroundColor: item.color }} />

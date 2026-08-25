@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import cajaService from "../services/cajaService";
 import HistorialVentas from "../components/admin/HistorialVentas";
 import MetricasOperativas from "../components/admin/MetricasOperativas";
 import ProductosTop from "../components/admin/ProductosTop";
@@ -8,6 +10,14 @@ import { IconoCampana, IconoTelefono, IconoUsuario } from "../components/common/
 
 export default function DashboardAdminPage({ onIrCaja }) {
   const logoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN453N6mpAhn09UKYb6yIXeJS43lFNZ41j7YQtRNGHgbZONCxXKd-xog&s=10";
+  const filtros = useMemo(() => ({}), []);
+
+  const resumen = useMemo(() => cajaService.getResumenVentas(), []);
+  const productos = useMemo(() => cajaService.getProductosMasVendidos(filtros), []);
+  const metodosPago = useMemo(() => cajaService.getVentasPorMetodoPago(filtros), []);
+  const ventasPorDia = useMemo(() => cajaService.getVentasPorDia(filtros), []);
+  const historial = useMemo(() => cajaService.getHistorialVentas(filtros), []);
+  const pedidosPendientes = useMemo(() => cajaService.getPedidosPendientes().length, []);
 
   return (
     <div className="lys-root admin-screen">
@@ -48,17 +58,17 @@ export default function DashboardAdminPage({ onIrCaja }) {
           </div>
         </section>
 
-        <TarjetasResumen />
-        <MetricasOperativas />
+        <TarjetasResumen resumen={resumen} />
+        <MetricasOperativas resumen={resumen} pedidosPendientes={pedidosPendientes} />
 
         <section className="admin-double-grid">
-          <VentasMetodoPago />
-          <ProductosTop />
+          <VentasMetodoPago metodos={metodosPago} />
+          <ProductosTop productos={productos} />
         </section>
 
         <section className="admin-double-grid">
-          <Ventas7Dias />
-          <HistorialVentas />
+          <Ventas7Dias ventas={ventasPorDia} />
+          <HistorialVentas ventas={historial} />
         </section>
       </main>
     </div>

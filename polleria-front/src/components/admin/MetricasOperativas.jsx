@@ -6,50 +6,59 @@ import {
   IconoXCirculo,
 } from "../common/Iconos";
 
-const metricas = [
-  {
-    id: "completados",
-    etiqueta: "Pedidos completados",
-    valor: "245",
-    comparativa: "Sube 14.2% vs ayer",
-    claseIcono: "green",
-    colorBarra: "#2E7D32",
-    icono: <IconoCheckCirculo size={16} />,
-    barras: [40, 55, 60, 45, 70, 85, 90, 80, 100, 95],
-  },
-  {
-    id: "pendientes",
-    etiqueta: "Pedidos pendientes",
-    valor: "18",
-    comparativa: "Sube 5.6% vs ayer",
-    claseIcono: "yellow",
-    colorBarra: "#E8A33D",
-    icono: <IconoReloj size={16} />,
-    barras: [30, 45, 20, 60, 50, 70, 40, 65, 80, 75],
-  },
-  {
-    id: "cancelados",
-    etiqueta: "Pedidos cancelados",
-    valor: "5",
-    comparativa: "Sube 25.0% vs ayer",
-    claseIcono: "red",
-    colorBarra: "#E23A32",
-    icono: <IconoXCirculo size={16} />,
-    barras: [20, 30, 45, 25, 60, 40, 50, 30, 20, 35],
-  },
-  {
-    id: "ventas",
-    etiqueta: "Total ventas realizadas",
-    valor: "S/ 28,560.40",
-    comparativa: "Sube 8.3% vs semana",
-    claseIcono: "blue",
-    colorBarra: "#1565C0",
-    icono: <IconoGrafico size={16} />,
-    barras: [50, 60, 55, 70, 65, 80, 85, 90, 95, 100],
-  },
-];
+const formatoSoles = new Intl.NumberFormat("es-PE", {
+  style: "currency",
+  currency: "PEN",
+});
 
-export default function MetricasOperativas() {
+function crearMetricas(resumen, pedidosPendientes) {
+  return [
+    {
+      id: "completados",
+      etiqueta: "Pedidos completados",
+      valor: `${resumen?.total?.cantidadPedidos || 0}`,
+      comparativa: `${resumen?.dia?.cantidadPedidos || 0} completados hoy`,
+      claseIcono: "green",
+      colorBarra: "#2E7D32",
+      icono: <IconoCheckCirculo size={16} />,
+      barras: [40, 55, 60, 45, 70, 85, 90, 80, 100, 95],
+    },
+    {
+      id: "pendientes",
+      etiqueta: "Pedidos pendientes",
+      valor: `${pedidosPendientes}`,
+      comparativa: "Pendientes por cobrar",
+      claseIcono: "yellow",
+      colorBarra: "#E8A33D",
+      icono: <IconoReloj size={16} />,
+      barras: [30, 45, 20, 60, 50, 70, 40, 65, 80, 75],
+    },
+    {
+      id: "cancelados",
+      etiqueta: "Pedidos cancelados",
+      valor: "0",
+      comparativa: "Sin cancelaciones registradas",
+      claseIcono: "red",
+      colorBarra: "#E23A32",
+      icono: <IconoXCirculo size={16} />,
+      barras: [20, 30, 45, 25, 60, 40, 50, 30, 20, 35],
+    },
+    {
+      id: "ventas",
+      etiqueta: "Total ventas realizadas",
+      valor: formatoSoles.format(resumen?.total?.totalVentas || 0),
+      comparativa: `${resumen?.semana?.cantidadPedidos || 0} ventas esta semana`,
+      claseIcono: "blue",
+      colorBarra: "#1565C0",
+      icono: <IconoGrafico size={16} />,
+      barras: [50, 60, 55, 70, 65, 80, 85, 90, 95, 100],
+    },
+  ];
+}
+
+export default function MetricasOperativas({ resumen, pedidosPendientes = 0 }) {
+  const metricas = crearMetricas(resumen, pedidosPendientes);
+
   return (
     <section className="ticket-card admin-ops-card">
       <div className="admin-block-title">

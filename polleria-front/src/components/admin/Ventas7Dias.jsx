@@ -1,19 +1,24 @@
 import { IconoGrafico } from "../common/Iconos";
 
-const puntos = [
-  { dia: "18 May", x: 40, y: 120 },
-  { dia: "19 May", x: 90, y: 110 },
-  { dia: "20 May", x: 140, y: 115 },
-  { dia: "21 May", x: 190, y: 70 },
-  { dia: "22 May", x: 240, y: 50 },
-  { dia: "23 May", x: 290, y: 30 },
-  { dia: "24 May", x: 340, y: 40 },
-];
+function crearPuntos(ventas) {
+  const datos = ventas.slice(-7);
+  const maximo = Math.max(...datos.map((venta) => venta.total), 1);
+  const totalPuntos = Math.max(datos.length - 1, 1);
 
-const linea = puntos.map((punto) => `${punto.x},${punto.y}`).join(" ");
-const area = `40,160 ${linea} 340,160`;
+  return datos.map((venta, index) => ({
+    dia: new Date(`${venta.fecha}T00:00:00`).toLocaleDateString("es-PE", { day: "2-digit", month: "short" }),
+    x: 40 + (300 / totalPuntos) * index,
+    y: 150 - (venta.total / maximo) * 120,
+  }));
+}
 
-export default function Ventas7Dias() {
+export default function Ventas7Dias({ ventas = [] }) {
+  const puntos = crearPuntos(ventas);
+  const linea = puntos.map((punto) => `${punto.x},${punto.y}`).join(" ");
+  const primerX = puntos[0]?.x || 40;
+  const ultimoX = puntos[puntos.length - 1]?.x || 340;
+  const area = `${primerX},160 ${linea} ${ultimoX},160`;
+
   return (
     <section className="ticket-card admin-sales-card">
       <div className="admin-sales-head">
@@ -47,8 +52,8 @@ export default function Ventas7Dias() {
           <text x="5" y="114" fill="#9E958C" fontSize="10" fontFamily="IBM Plex Mono">S/ 1K</text>
           <text x="5" y="154" fill="#9E958C" fontSize="10" fontFamily="IBM Plex Mono">S/ 0</text>
 
-          <polygon points={area} fill="url(#adminAreaVentas)" />
-          <polyline fill="none" stroke="var(--ember)" strokeLinecap="round" strokeWidth="3" points={linea} />
+          {puntos.length > 0 && <polygon points={area} fill="url(#adminAreaVentas)" />}
+          {puntos.length > 0 && <polyline fill="none" stroke="var(--ember)" strokeLinecap="round" strokeWidth="3" points={linea} />}
 
           {puntos.map((punto) => (
             <g key={punto.dia}>
@@ -61,7 +66,7 @@ export default function Ventas7Dias() {
 
       <div className="admin-chart-legend">
         <span />
-        <p>Ventas (S/)</p>
+        <p>{puntos.length > 0 ? "Ventas (S/)" : "Sin ventas para graficar"}</p>
       </div>
     </section>
   );

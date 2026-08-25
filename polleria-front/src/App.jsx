@@ -1,9 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import "./styles/lys-theme.css";
 import CajaPage from "./pages/CajaPage";
+import DashboardAdminPage from "./pages/DashboardAdminPage";
 
 function App() {
-return <CajaPage />;
+  const [pagina, setPagina] = useState("dashboard");
+
+  if (pagina === "dashboard") {
+    return <DashboardAdminPage onIrCaja={() => setPagina("caja")} />;
+  }
+
+  return <CajaPage />;
 }
 
-export default App
+export default App;

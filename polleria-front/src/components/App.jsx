@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import {
-  Flame, Search, Plus, Minus, Trash2, X, ArrowLeft,
+  Flame, Search, ArrowLeft,
   MapPin, Store, Wallet, CreditCard, Smartphone, CheckCircle2
 } from "lucide-react";
 import CategoryIcon from "./CategoryIcon";

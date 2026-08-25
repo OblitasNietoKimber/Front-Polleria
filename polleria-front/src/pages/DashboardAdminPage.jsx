@@ -1,6 +1,7 @@
 import MetricasOperativas from "../components/admin/MetricasOperativas";
 import ProductosTop from "../components/admin/ProductosTop";
 import TarjetasResumen from "../components/admin/TarjetasResumen";
+import Ventas7Dias from "../components/admin/Ventas7Dias";
 import VentasMetodoPago from "../components/admin/VentasMetodoPago";
 import { IconoCampana, IconoTelefono, IconoUsuario } from "../components/common/Iconos";
 
@@ -48,8 +49,13 @@ export default function DashboardAdminPage({ onIrCaja }) {
 
         <TarjetasResumen />
         <MetricasOperativas />
-        <VentasMetodoPago />
-        <ProductosTop />
+
+        <section className="admin-double-grid">
+          <VentasMetodoPago />
+          <ProductosTop />
+        </section>
+
+        <Ventas7Dias />
       </main>
     </div>
   );

@@ -1,5 +1,6 @@
 import MetricasOperativas from "../components/admin/MetricasOperativas";
 import TarjetasResumen from "../components/admin/TarjetasResumen";
+import VentasMetodoPago from "../components/admin/VentasMetodoPago";
 import { IconoCampana, IconoTelefono, IconoUsuario } from "../components/common/Iconos";
 
 export default function DashboardAdminPage({ onIrCaja }) {
@@ -46,6 +47,7 @@ export default function DashboardAdminPage({ onIrCaja }) {
 
         <TarjetasResumen />
         <MetricasOperativas />
+        <VentasMetodoPago />
       </main>
     </div>
   );

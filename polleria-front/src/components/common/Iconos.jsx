@@ -77,3 +77,10 @@ export const IconoXCirculo = ({ size = 18, color = "currentColor" }) => (
     <line x1="9" y1="9" x2="15" y2="15"></line>
   </svg>
 );
+
+export const IconoTarjeta = ({ size = 18, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+    <line x1="1" y1="10" x2="23" y2="10"></line>
+  </svg>
+);

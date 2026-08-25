@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import './App.css'
+import CajaPage from "./pages/CajaPage";
 
 function App() {
-    return (
-        <></>
-  );
+return <CajaPage />;
 }
 
 export default App

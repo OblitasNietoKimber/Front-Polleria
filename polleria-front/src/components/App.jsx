@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from "react";
 import {
   Flame, Search, ArrowLeft,
-  MapPin, Store, Wallet, CreditCard, Smartphone, CheckCircle2
+  CheckCircle2
 } from "lucide-react";
 import CategoryIcon from "./CategoryIcon";
 import SiteHeader from "./SiteHeader";
 import ProductDetailModal from "./ProductDetailModal";
 import CartDrawer from "./CartDrawer";
 import DeliveryForm from "./DeliveryForm";
+import PaymentMethod from "./PaymentMethod";
 import { CATEGORIES, DELIVERY_COST, PRODUCTS } from "../data/menu";
 import { money } from "../utils/currency";
 
@@ -382,43 +383,12 @@ export default function LenasYSaboresApp() {
           />}
 
           {/* STEP 2: PAYMENT */}
-          {checkoutStep === 2 && (
-            <div>
-              <h2 className="font-display" style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: 18 }}>Método de pago</h2>
-              <div style={{ display: "grid", gap: 12 }}>
-                {[
-                  { id: "efectivo", label: "Efectivo", desc: "Pagas al recibir tu pedido.", icon: Wallet },
-                  { id: "tarjeta", label: "Tarjeta", desc: "Débito o crédito, contra entrega o en tienda.", icon: CreditCard },
-                  { id: "yape", label: "Yape / Plin", desc: "Pago digital mediante QR.", icon: Smartphone },
-                ].map((m) => (
-                  <button
-                    key={m.id}
-                    onClick={() => setPayment(m.id)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 14, textAlign: "left",
-                      padding: "16px 18px", borderRadius: 4, cursor: "pointer",
-                      border: payment === m.id ? "1.5px solid var(--ember)" : "1.5px solid var(--line)",
-                      background: payment === m.id ? "#FCEDE5" : "var(--paper)",
-                      transition: "all .15s ease",
-                    }}
-                  >
-                    <m.icon size={22} color={payment === m.id ? "var(--ember)" : "var(--smoke)"} strokeWidth={1.7} />
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{m.label}</div>
-                      <div style={{ fontSize: "0.8rem", color: "var(--smoke)" }}>{m.desc}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
-                <button className="btn-outline" style={{ flex: 1 }} onClick={() => setCheckoutStep(1)}>Atrás</button>
-                <button className="btn-ember" style={{ flex: 2 }} disabled={!payment} onClick={() => setCheckoutStep(3)}>
-                  Ver resumen
-                </button>
-              </div>
-            </div>
-          )}
+          {checkoutStep === 2 && <PaymentMethod
+            payment={payment}
+            onChange={setPayment}
+            onBack={() => setCheckoutStep(1)}
+            onContinue={() => setCheckoutStep(3)}
+          />}
 
           {/* STEP 3: SUMMARY */}
           {checkoutStep === 3 && (

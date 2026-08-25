@@ -1,3 +1,4 @@
+import HistorialVentas from "../components/admin/HistorialVentas";
 import MetricasOperativas from "../components/admin/MetricasOperativas";
 import ProductosTop from "../components/admin/ProductosTop";
 import TarjetasResumen from "../components/admin/TarjetasResumen";
@@ -55,7 +56,10 @@ export default function DashboardAdminPage({ onIrCaja }) {
           <ProductosTop />
         </section>
 
-        <Ventas7Dias />
+        <section className="admin-double-grid">
+          <Ventas7Dias />
+          <HistorialVentas />
+        </section>
       </main>
     </div>
   );
